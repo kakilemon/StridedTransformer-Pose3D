@@ -41,6 +41,7 @@ def get_pose3D(keypoints, length, size):
 
     ## 3D
     print('\nGenerating 3D pose...')
+    res = []
     for i in tqdm(range(video_length)):
         img_size = size
 
@@ -91,7 +92,8 @@ def get_pose3D(keypoints, length, size):
         rot = np.array(rot, dtype='float32')
         post_out = camera_to_world(post_out, R=rot, t=0)
         post_out[:, 2] -= np.min(post_out[:, 2])
-        return post_out
+        res.append(post_out)
+    return np.array(res)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -105,5 +107,6 @@ if __name__ == "__main__":
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 
     keypoints = np.load(args.keypoints, allow_pickle=True)['reconstruction']
+    print(args.length, (args.sizex, args.sizey))
     out = get_pose3D(keypoints, args.length, (args.sizex, args.sizey))
-    np.save('out.npz', out)
+    np.save('out', out)
