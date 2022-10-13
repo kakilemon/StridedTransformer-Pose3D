@@ -32,7 +32,6 @@ def get_pose3D(keypoints, length, size):
     for name, key in model_dict.items():
         model_dict[name] = pre_dict[name]
     model.load_state_dict(model_dict)
-
     model.eval()
 
     ## input
@@ -93,3 +92,18 @@ def get_pose3D(keypoints, length, size):
         post_out = camera_to_world(post_out, R=rot, t=0)
         post_out[:, 2] -= np.min(post_out[:, 2])
         return post_out
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--keypoints', type=str, default='keypoints.npz', help='keypoints')
+    parser.add_argument('--length', type=int, default=255, help='length')
+    parser.add_argument('--sizex', type=int, default=1080, help='x')
+    parser.add_argument('--sizey', type=int, default=1920, help='y')
+    parser.add_argument('--gpu', type=str, default='0', help='input video')
+    args = parser.parse_args()
+
+    os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
+
+    keypoints = np.load(args.keypoints, allow_pickle=True)['reconstruction']
+    out = get_pose3D(keypoints, args.length, (args.sizex, args.sizey))
+    np.save('out.npz', out)
