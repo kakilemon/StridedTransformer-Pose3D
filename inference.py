@@ -106,7 +106,10 @@ if __name__ == "__main__":
 
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 
-    keypoints = np.load(args.keypoints, allow_pickle=True)['reconstruction']
+    if os.path.splitext(arg.keypoints)[1] == '.npz':
+        keypoints = np.load(args.keypoints, allow_pickle=True)['reconstruction']
+    else: 
+        keypoints = np.load(args.keypoints, allow_pickle=True)
     print(args.length, (args.sizex, args.sizey))
     out = get_pose3D(keypoints, args.length, (args.sizex, args.sizey))
     np.save('out', out)
