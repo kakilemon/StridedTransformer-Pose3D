@@ -109,6 +109,6 @@ if __name__ == "__main__":
         keypoints = np.load(args.keypoints, allow_pickle=True)['reconstruction']
     else: 
         keypoints = np.load(args.keypoints, allow_pickle=True)
-    length = len(keypoints)
+    length = len(keypoints[0])
     out = get_pose3D(keypoints, length, (args.sizex, args.sizey))
     np.save('out', out)
