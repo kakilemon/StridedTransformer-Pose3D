@@ -98,7 +98,6 @@ def get_pose3D(keypoints, length, size):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--keypoints', type=str, default='keypoints.npz', help='keypoints')
-    parser.add_argument('--length', type=int, default=255, help='length')
     parser.add_argument('--sizex', type=int, default=1080, help='x')
     parser.add_argument('--sizey', type=int, default=1920, help='y')
     parser.add_argument('--gpu', type=str, default='0', help='input video')
@@ -110,6 +109,6 @@ if __name__ == "__main__":
         keypoints = np.load(args.keypoints, allow_pickle=True)['reconstruction']
     else: 
         keypoints = np.load(args.keypoints, allow_pickle=True)
-    print(args.length, (args.sizex, args.sizey))
-    out = get_pose3D(keypoints, args.length, (args.sizex, args.sizey))
+    length = len(keypoints)
+    out = get_pose3D(keypoints, length, (args.sizex, args.sizey))
     np.save('out', out)
