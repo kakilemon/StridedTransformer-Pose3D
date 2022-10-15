@@ -106,7 +106,7 @@ if __name__ == "__main__":
 
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 
-    if os.path.splitext(arg.keypoints)[1] == '.npz':
+    if os.path.splitext(args.keypoints)[1] == '.npz':
         keypoints = np.load(args.keypoints, allow_pickle=True)['reconstruction']
     else: 
         keypoints = np.load(args.keypoints, allow_pickle=True)
